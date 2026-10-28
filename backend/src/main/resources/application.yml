@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: emobility-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/emobility?userTimeZone=UTC
+    username: emobility
+    password: emobility
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    ttl-minutes: 120
+  reservation:
+    hold-minutes: 15
+    extend-minutes: 10
+    max-extensions: 2
+  vehicle:
+    min-battery-percent: 20
+  hub:
+    overload-threshold: 0.9
+  iot:
+    mode: simulated
+    telemetry-interval-seconds: 30
+    command-timeout-seconds: 5
