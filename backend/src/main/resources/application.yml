@@ -1,8 +1,11 @@
 spring:
   application:
     name: emobility-backend
+  docker:
+    compose:
+      enabled: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/emobility?userTimeZone=UTC
+    url: jdbc:postgresql://localhost:5433/emobility?userTimeZone=UTC
     username: emobility
     password: emobility
   jpa:
@@ -30,7 +33,22 @@ app:
     min-battery-percent: 20
   hub:
     overload-threshold: 0.9
+    offline-after-missed-cycles: 3
+    imbalance-threshold: 0.3
+  booking:
+    no-show-minutes: 15
+    check-in-grace-minutes: 15
+  charging:
+    w-battery: 0.6
+    w-demand: 0.4
+    recalc-interval-minutes: 10
   iot:
     mode: simulated
     telemetry-interval-seconds: 30
     command-timeout-seconds: 5
+    api-key: dev-iot-secret-key-123456
+  cors:
+    allowed-origins:
+      - "http://localhost:3000"
+      - "http://localhost:5173"
+      - "http://localhost:8080"
