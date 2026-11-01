@@ -42,4 +42,7 @@ public class Vehicle extends VersionedEntity {
     public Instant getLastSeenAt() { return lastSeenAt; }
 
     public void changeStatus(VehicleStatus status) { this.status = status; }
+
+    /** {@code null} = đang trên xe tải điều chuyển (RB), không thuộc Hub nào. */
+    public void changeHub(Long hubId) { this.hubId = hubId; }
 }

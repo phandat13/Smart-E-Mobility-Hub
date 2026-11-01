@@ -2,6 +2,7 @@ package vn.edu.hcmut.emobility.core.config;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import java.time.Duration;
 import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +22,11 @@ public record AppProperties(
     public record Jwt(@NotBlank String secret, @Positive long ttlMinutes) {}
 
     /** RE01 giữ chỗ 15 phút; RE04 gia hạn +10 phút, tối đa 2 lần. */
-    public record Reservation(@Positive int holdMinutes, @Positive int extendMinutes, @PositiveOrZero int maxExtensions) {}
+    public record Reservation(@Positive int holdMinutes, @Positive int extendMinutes, @PositiveOrZero int maxExtensions) {
+        public Duration holdDuration() { return Duration.ofMinutes(holdMinutes); }
+        public Duration extendDuration() { return Duration.ofMinutes(extendMinutes); }
+        public boolean canExtend(int extensionCount) { return extensionCount < maxExtensions; }
+    }
 
     /** RE05 / mục 2.3: pin tối thiểu để phục vụ. */
     public record VehicleRules(@Min(0) @Max(100) int minBatteryPercent) {}
@@ -32,7 +37,10 @@ public record AppProperties(
                            @DecimalMin("0.0") @DecimalMax("1.0") double imbalanceThreshold) {}
 
     /** PV01/PV03: giữ chỗ 15 phút, cửa sổ check-in ±15 phút. */
-    public record Booking(@Positive int noShowMinutes, @Positive int checkInGraceMinutes) {}
+    public record Booking(@Positive int noShowMinutes, @Positive int checkInGraceMinutes) {
+        public Duration noShowDuration() { return Duration.ofMinutes(noShowMinutes); }
+        public Duration checkInGrace() { return Duration.ofMinutes(checkInGraceMinutes); }
+    }
 
     /** SC01: trọng số ưu tiên = wBattery*(100-pin) + wDemand*nhu cầu; chu kỳ 10 phút. */
     public record Charging(@PositiveOrZero double wBattery, @PositiveOrZero double wDemand,
