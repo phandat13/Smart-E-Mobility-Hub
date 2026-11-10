@@ -1,0 +1,95 @@
+import { useMemo, useState } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import '../mo.css';
+import './hub-operations.css';
+
+type Hub = { id:string; name:string; type:string; area:string; address:string; capacity:number; vehicles:number; chargers:number; activeChargers:number; status:string };
+type Charger = { id:string; connector:string; power:string; status:string; session:string };
+type Vehicle = { id:string; type:string; battery:number; hub:string; status:string };
+const seedHubs:Hub[] = [
+ {id:'ktx-a',name:'KTX Khu A',type:'Ký túc xá',area:'Khu Đông',address:'Đường Tạ Quang Bửu, TP. Thủ Đức',capacity:40,vehicles:24,chargers:6,activeChargers:5,status:'Hoạt động'},
+ {id:'ktx-b',name:'KTX Khu B',type:'Ký túc xá',area:'Khu Đông',address:'Đường Mạc Đĩnh Chi, TP. Thủ Đức',capacity:32,vehicles:29,chargers:6,activeChargers:6,status:'Hoạt động'},
+ {id:'dhbk',name:'Cơ sở Lý Thường Kiệt',type:'Trường học',area:'Khu Trung tâm',address:'268 Lý Thường Kiệt, Quận 10',capacity:48,vehicles:31,chargers:8,activeChargers:8,status:'Hoạt động'},
+ {id:'dhqg',name:'Khu Công nghệ phần mềm',type:'Trường học',area:'Khu Đông',address:'Khu phố 6, TP. Thủ Đức',capacity:28,vehicles:0,chargers:4,activeChargers:0,status:'Bảo trì'}
+];
+const seedChargers:Charger[] = [
+ {id:'01',connector:'Type 2',power:'7.4 kW',status:'Khả dụng',session:'—'},
+ {id:'02',connector:'Type 2',power:'7.4 kW',status:'Đang sạc',session:'UG-018 · 42 phút'},
+ {id:'03',connector:'Type 2',power:'11 kW',status:'Đã đặt',session:'UG-027 · 10:30'},
+ {id:'04',connector:'Type 2',power:'7.4 kW',status:'Báo lỗi',session:'Lỗi E-CHG-02'},
+ {id:'05',connector:'Type 2',power:'11 kW',status:'Khả dụng',session:'—'},
+ {id:'06',connector:'Type 2',power:'7.4 kW',status:'Khả dụng',session:'—'}
+];
+const seedVehicles:Vehicle[] = [
+ {id:'UG-018',type:'Xe đạp điện',battery:86,hub:'KTX Khu A',status:'Sẵn sàng'},
+ {id:'UG-027',type:'Xe máy điện',battery:62,hub:'KTX Khu A',status:'Đang sạc'},
+ {id:'UG-040',type:'Xe đạp điện',battery:16,hub:'KTX Khu A',status:'Cần kiểm tra'},
+ {id:'UG-052',type:'Xe máy điện',battery:74,hub:'KTX Khu B',status:'Đang sử dụng'},
+ {id:'UG-063',type:'Xe đạp điện',battery:91,hub:'KTX Khu B',status:'Sẵn sàng'},
+ {id:'UG-071',type:'Xe máy điện',battery:38,hub:'Cơ sở Lý Thường Kiệt',status:'Bảo trì'},
+ {id:'UG-084',type:'Xe đạp điện',battery:55,hub:'Cơ sở Lý Thường Kiệt',status:'Sẵn sàng'}
+];
+function Status({value}:{value:string}) { const tone=['Hoạt động','Sẵn sàng','Khả dụng'].includes(value)?'success':['Đang sạc','Đã đặt'].includes(value)?'info':['Báo lỗi','Ngưng hoạt động','Cần kiểm tra'].includes(value)?'danger':'warning'; return <span className={'op-status op-status--'+tone}>{value}</span>; }
+function Head({title,sub,action}:{title:string;sub:React.ReactNode;action?:React.ReactNode}) { return <div className="page-head"><div><h1 className="page-title">{title}</h1><p className="page-sub">{sub}</p></div>{action}</div>; }
+function Modal({title,close,children}:{title:string;close:()=>void;children:React.ReactNode}) { return <div className="op-modal-backdrop" onMouseDown={e=>{if(e.target===e.currentTarget)close();}}><section className="op-modal" role="dialog" aria-modal="true"><div className="op-modal__head"><h2>{title}</h2><button className="op-icon-btn" onClick={close}>×</button></div>{children}</section></div>; }
+function Field({label,children}:{label:string;children:React.ReactNode}) { return <label className="op-field"><span>{label}</span>{children}</label>; }
+
+export function HubDetailPage() {
+ const {hubId='ktx-a'}=useParams(); const hub=seedHubs.find(h=>h.id===hubId)||seedHubs[0]; const [selected,setSelected]=useState('');
+ const slots=Array.from({length:hub.capacity},(_,i)=>{const n=i+1;const empty=[2,6,10,13,17,21,25,28,30,34,37,39].includes(n);const fault=[12,29].includes(n);const reserved=[3,7,15,19,23,31].includes(n);return {id:'P-'+String(n).padStart(2,'0'),state:fault?'fault':empty?'empty':reserved?'reserved':'occupied'};});
+ return <div className="op-page"><Head title={'Chi tiết Hub · '+hub.name} sub={<><Link to="/hubs/manage">Hub & hạ tầng</Link>　›　Trạng thái chi tiết · Cập nhật lúc 09:42:10</>} action={<div className="op-actions"><Link className="btn btn--soft" to="/hubs/manage">Quản lý Hub</Link><Link className="btn btn--primary" to={'/hubs/'+hub.id+'/chargers'}>Quản lý cổng sạc</Link></div>}/><div className="op-detail-grid">
+ <aside className="card op-summary"><div className="op-summary__title"><h2>{hub.name}</h2><Status value={hub.status}/></div><div className="op-map-placeholder"><span>⌖</span><b>{hub.name}</b><small>{hub.address}</small></div>
+ { [['Loại Hub',hub.type],['Xe tại Hub',hub.vehicles+' xe'],['Chỗ đỗ',Math.min(hub.vehicles+4,hub.capacity)+' / '+hub.capacity+' có xe'],['Cổng sạc',hub.activeChargers+' / '+hub.chargers+' hoạt động'],['Cập nhật','09:42:10']].map(([k,v])=><div className="op-summary-row" key={k}><span>{k}</span><b>{v}</b></div>)}
+ <h3 className="op-section-label">Cảnh báo đang mở</h3><div className="op-alert op-alert--danger">⚠ Cổng #04 báo lỗi E-CHG-02 – ngừng nhận phiên sạc.</div><div className="op-alert op-alert--warning">🔋 UG-040 pin 16% – cần sạc.</div></aside>
+ <section className="card op-parking"><div className="op-card-heading"><div><h2>Sơ đồ chỗ đỗ · {hub.capacity} vị trí</h2><p>Chọn một vị trí để xem trạng thái tài nguyên</p></div><div className="op-legend"><span><i className="occupied"/>Có xe</span><span><i className="empty"/>Trống</span><span><i className="reserved"/>Đã đặt</span><span><i className="fault"/>Lỗi</span></div></div>
+ <div className="op-slot-grid">{slots.map(s=><button key={s.id} onClick={()=>setSelected(s.id)} className={'op-slot op-slot--'+s.state+(selected===s.id?' is-selected':'')}><b>{s.id}</b><small>{s.state==='empty'?'Trống':s.state==='fault'?'Lỗi':s.state==='reserved'?'Đã đặt':'Có xe'}</small></button>)}</div>
+ {selected&&<div className="op-selected"><b>{selected}</b><span>Trạng thái vị trí được cập nhật theo dữ liệu IoT mới nhất.</span><button className="op-text-btn" onClick={()=>setSelected('')}>Bỏ chọn</button></div>}
+ <div className="op-card-heading op-charger-heading"><div><h2>Trạng thái cổng sạc</h2><p>{hub.activeChargers} cổng đang hoạt động · {hub.chargers-hub.activeChargers} cổng cần kiểm tra</p></div><Link className="op-text-btn" to={'/hubs/'+hub.id+'/chargers'}>Xem tất cả →</Link></div><div className="op-mini-chargers">{seedChargers.slice(0,4).map(c=><div key={c.id}><b>Cổng #{c.id}</b><Status value={c.status}/></div>)}</div></section>
+ </div></div>;
+}
+
+export function HubManagementPage() {
+ const [hubs,setHubs]=useState(seedHubs);const [query,setQuery]=useState('');const [status,setStatus]=useState('Tất cả');const [draft,setDraft]=useState<Hub>(seedHubs[0]);const [mode,setMode]=useState('');const [confirm,setConfirm]=useState<Hub|null>(null);
+ const visible=hubs.filter(h=>(status==='Tất cả'||h.status===status)&&[h.name,h.area,h.id].join(' ').toLowerCase().includes(query.toLowerCase()));
+ const create=()=>{setDraft({id:'hub-'+Date.now(),name:'',type:'Ký túc xá',area:'Khu Đông',address:'',capacity:30,vehicles:0,chargers:4,activeChargers:4,status:'Hoạt động'});setMode('create');};
+ const save=()=>{if(!draft.name.trim()||!draft.address.trim())return;setHubs(p=>mode==='create'?[...p,draft]:p.map(h=>h.id===draft.id?draft:h));setMode('');};
+ const stop=()=>{if(!confirm)return;setHubs(p=>p.map(h=>h.id===confirm.id?{...h,status:h.status==='Ngưng hoạt động'?'Hoạt động':'Ngưng hoạt động'}:h));setConfirm(null);};
+ return <div className="op-page"><Head title="Quản lý thông tin Hub" sub={hubs.length+' Hub trong hệ thống · Thêm mới, cập nhật hoặc ngưng hoạt động'} action={<button className="btn btn--primary" onClick={create}>＋ Thêm Hub mới</button>}/>
+ <section className="card op-table-card"><div className="op-toolbar"><input className="op-search" placeholder="⌕  Tìm theo tên, mã Hub..." value={query} onChange={e=>setQuery(e.target.value)}/><select value={status} onChange={e=>setStatus(e.target.value)}><option>Tất cả</option><option>Hoạt động</option><option>Bảo trì</option><option>Ngưng hoạt động</option></select></div>
+ <div className="op-table-wrap"><table className="op-table"><thead><tr><th>MÃ HUB / TÊN HUB</th><th>KHU VỰC</th><th>LOẠI HUB</th><th>CHỖ ĐỖ</th><th>CỔNG SẠC</th><th>TRẠNG THÁI</th><th>THAO TÁC</th></tr></thead><tbody>{visible.map(h=><tr key={h.id}><td><Link className="op-primary-link" to={'/hubs/'+h.id}>{h.name}</Link><small>{h.id.toUpperCase()}</small></td><td>{h.area}</td><td>{h.type}</td><td>{h.vehicles} / {h.capacity}</td><td>{h.activeChargers} / {h.chargers}</td><td><Status value={h.status}/></td><td><div className="op-row-actions"><button onClick={()=>{setDraft(h);setMode('edit');}}>Sửa</button><button className="danger-text" onClick={()=>setConfirm(h)}>{h.status==='Ngưng hoạt động'?'Kích hoạt':'Ngưng'}</button></div></td></tr>)}</tbody></table>{!visible.length&&<div className="empty">Không tìm thấy Hub phù hợp.</div>}</div></section>
+ {(mode==='create'||mode==='edit')&&<Modal title={mode==='create'?'Thêm Hub mới':'Chỉnh sửa thông tin Hub'} close={()=>setMode('')}><div className="op-form-grid">
+ <Field label="Tên Hub"><input value={draft.name} onChange={e=>setDraft({...draft,name:e.target.value})} placeholder="VD: KTX Khu C"/></Field>
+ <Field label="Loại Hub"><select value={draft.type} onChange={e=>setDraft({...draft,type:e.target.value})}><option>Ký túc xá</option><option>Trường học</option><option>Khu dịch vụ</option></select></Field>
+ <Field label="Khu vực"><select value={draft.area} onChange={e=>setDraft({...draft,area:e.target.value})}><option>Khu Đông</option><option>Khu Trung tâm</option><option>Khu Tây</option></select></Field>
+ <Field label="Địa chỉ"><input value={draft.address} onChange={e=>setDraft({...draft,address:e.target.value})} placeholder="Địa chỉ Hub"/></Field>
+ <Field label="Sức chứa chỗ đỗ"><input type="number" min="1" value={draft.capacity} onChange={e=>setDraft({...draft,capacity:Number(e.target.value)})}/></Field>
+ <Field label="Số cổng sạc"><input type="number" min="0" value={draft.chargers} onChange={e=>setDraft({...draft,chargers:Number(e.target.value),activeChargers:Number(e.target.value)})}/></Field></div>
+ <div className="op-modal__actions"><button className="btn btn--soft" onClick={()=>setMode('')}>Hủy</button><button className="btn btn--primary" disabled={!draft.name.trim()||!draft.address.trim()} onClick={save}>Lưu thông tin</button></div></Modal>}
+ {confirm&&<Modal title={confirm.status==='Ngưng hoạt động'?'Kích hoạt lại Hub?':'Ngưng hoạt động Hub?'} close={()=>setConfirm(null)}><p className="op-confirm-copy">Bạn có chắc muốn thay đổi trạng thái của <b>{confirm.name}</b>?</p><div className="op-modal__actions"><button className="btn btn--soft" onClick={()=>setConfirm(null)}>Quay lại</button><button className="btn btn--primary" onClick={stop}>Xác nhận</button></div></Modal>}
+ </div>;
+}
+
+export function ChargerManagementPage() {
+ const {hubId='ktx-a'}=useParams();const hub=seedHubs.find(h=>h.id===hubId)||seedHubs[0];const [rows,setRows]=useState(seedChargers);const [filter,setFilter]=useState('Tất cả');const [draft,setDraft]=useState<Charger>(seedChargers[0]);const [mode,setMode]=useState(false);const [confirm,setConfirm]=useState<Charger|null>(null);
+ const counts=useMemo(()=>({available:rows.filter(c=>c.status==='Khả dụng').length,charging:rows.filter(c=>c.status==='Đang sạc').length,booked:rows.filter(c=>c.status==='Đã đặt').length,faulty:rows.filter(c=>c.status==='Báo lỗi').length}),[rows]);
+ const save=()=>{setRows(p=>draft.id?p.map(c=>c.id===draft.id?draft:c):[...p,{...draft,id:String(p.length+1).padStart(2,'0')}]);setMode(false);};
+ return <div className="op-page"><Head title={'Quản lý cổng sạc · '+hub.name} sub={<><Link to="/hubs/manage">Hub & hạ tầng</Link>　›　{hub.name}　›　Cổng sạc</>} action={<button className="btn btn--primary" onClick={()=>{setDraft({id:'',connector:'Type 2',power:'7.4 kW',status:'Khả dụng',session:'—'});setMode(true);}}>＋ Thêm cổng sạc</button>}/>
+ <div className="op-kpi-row"><div className="op-kpi"><span>Tổng số cổng</span><b>{rows.length}</b></div><div className="op-kpi"><span>Khả dụng</span><b className="tone-success">{counts.available}</b></div><div className="op-kpi"><span>Đang sạc</span><b className="tone-info">{counts.charging}</b></div><div className="op-kpi"><span>Đã đặt</span><b>{counts.booked}</b></div><div className="op-kpi"><span>Báo lỗi</span><b className="tone-danger">{counts.faulty}</b></div></div>
+ <section className="card op-table-card"><div className="op-toolbar"><div><h2 className="card__title">Danh sách cổng sạc</h2><p className="page-sub">Theo dõi đầu sạc, công suất và phiên sử dụng hiện tại</p></div><select value={filter} onChange={e=>setFilter(e.target.value)}><option>Tất cả</option><option>Khả dụng</option><option>Đang sạc</option><option>Đã đặt</option><option>Báo lỗi</option></select></div>
+ <div className="op-table-wrap"><table className="op-table"><thead><tr><th>CỔNG</th><th>ĐẦU SẠC</th><th>CÔNG SUẤT</th><th>TRẠNG THÁI</th><th>PHIÊN HIỆN TẠI</th><th>THAO TÁC</th></tr></thead><tbody>{rows.filter(c=>filter==='Tất cả'||c.status===filter).map(c=><tr key={c.id}><td><b>#{c.id}</b></td><td>{c.connector}</td><td>{c.power}</td><td><Status value={c.status}/></td><td>{c.session}</td><td><div className="op-row-actions"><button onClick={()=>{setDraft(c);setMode(true);}}>Cấu hình</button><button className="danger-text" onClick={()=>setConfirm(c)}>{c.status==='Báo lỗi'?'Đã sửa':'Bảo trì'}</button></div></td></tr>)}</tbody></table></div></section>
+ {mode&&<Modal title={draft.id?'Cấu hình cổng #'+draft.id:'Thêm cổng sạc'} close={()=>setMode(false)}><div className="op-form-grid"><Field label="Loại đầu sạc"><select value={draft.connector} onChange={e=>setDraft({...draft,connector:e.target.value})}><option>Type 2</option><option>GB/T</option><option>CCS2</option></select></Field><Field label="Công suất"><select value={draft.power} onChange={e=>setDraft({...draft,power:e.target.value})}><option>3.5 kW</option><option>7.4 kW</option><option>11 kW</option><option>22 kW</option></select></Field><Field label="Trạng thái"><select value={draft.status} onChange={e=>setDraft({...draft,status:e.target.value})}><option>Khả dụng</option><option>Đang sạc</option><option>Đã đặt</option><option>Báo lỗi</option></select></Field></div><div className="op-modal__actions"><button className="btn btn--soft" onClick={()=>setMode(false)}>Hủy</button><button className="btn btn--primary" onClick={save}>Lưu cấu hình</button></div></Modal>}
+ {confirm&&<Modal title="Cập nhật trạng thái cổng sạc" close={()=>setConfirm(null)}><p className="op-confirm-copy">Cổng #{confirm.id} sẽ được chuyển sang trạng thái {confirm.status==='Báo lỗi'?'Khả dụng':'Báo lỗi'}.</p><div className="op-modal__actions"><button className="btn btn--soft" onClick={()=>setConfirm(null)}>Hủy</button><button className="btn btn--primary" onClick={()=>{setRows(p=>p.map(c=>c.id===confirm.id?{...c,status:c.status==='Báo lỗi'?'Khả dụng':'Báo lỗi',session:'—'}:c));setConfirm(null);}}>Xác nhận</button></div></Modal>}
+ </div>;
+}
+
+export function VehicleCatalogPage() {
+ const [rows,setRows]=useState(seedVehicles);const [hub,setHub]=useState('Tất cả');const [type,setType]=useState('Tất cả');const [status,setStatus]=useState('Tất cả');const [query,setQuery]=useState('');const [mode,setMode]=useState(false);const [draft,setDraft]=useState<Vehicle>(seedVehicles[0]);
+ const visible=rows.filter(v=>(hub==='Tất cả'||v.hub===hub)&&(type==='Tất cả'||v.type===type)&&(status==='Tất cả'||v.status===status)&&(v.id+' '+v.hub).toLowerCase().includes(query.toLowerCase()));
+ const save=()=>{if(!draft.id.trim())return;setRows(p=>p.some(v=>v.id===draft.id)?p.map(v=>v.id===draft.id?draft:v):[...p,draft]);setMode(false);};
+ return <div className="op-page"><Head title="Danh mục phương tiện dùng chung" sub={rows.length+' xe · lọc theo Hub / loại / trạng thái'} action={<button className="btn btn--primary" onClick={()=>{setDraft({id:'',type:'Xe đạp điện',battery:100,hub:'KTX Khu A',status:'Sẵn sàng'});setMode(true);}}>＋ Thêm xe mới</button>}/>
+ <section className="card op-table-card"><div className="op-toolbar op-toolbar--wrap"><input className="op-search" placeholder="⌕  Tìm mã xe..." value={query} onChange={e=>setQuery(e.target.value)}/><select value={hub} onChange={e=>setHub(e.target.value)}><option>Tất cả</option>{seedHubs.map(h=><option key={h.id}>{h.name}</option>)}</select><select value={type} onChange={e=>setType(e.target.value)}><option>Tất cả</option><option>Xe đạp điện</option><option>Xe máy điện</option></select><select value={status} onChange={e=>setStatus(e.target.value)}><option>Tất cả</option><option>Sẵn sàng</option><option>Đang sử dụng</option><option>Đang sạc</option><option>Cần kiểm tra</option><option>Bảo trì</option></select></div>
+ <div className="op-table-wrap"><table className="op-table"><thead><tr><th>MÃ XE</th><th>LOẠI</th><th>PIN</th><th>HUB</th><th>TRẠNG THÁI</th><th>THAO TÁC</th></tr></thead><tbody>{visible.map(v=><tr key={v.id}><td><b>{v.id}</b></td><td>{v.type}</td><td><div className="op-battery"><div><i style={{width:v.battery+'%'}}/></div><b>{v.battery}%</b></div></td><td>{v.hub}</td><td><Status value={v.status}/></td><td><button className="op-row-action" onClick={()=>{setDraft(v);setMode(true);}}>Chỉnh sửa</button></td></tr>)}</tbody></table>{!visible.length&&<div className="empty">Không có phương tiện phù hợp.</div>}</div></section>
+ {mode&&<Modal title={draft.id?'Cập nhật '+draft.id:'Thêm phương tiện'} close={()=>setMode(false)}><div className="op-form-grid"><Field label="Mã xe"><input value={draft.id} disabled={rows.some(v=>v.id===draft.id)} onChange={e=>setDraft({...draft,id:e.target.value.toUpperCase()})} placeholder="UG-100"/></Field><Field label="Loại phương tiện"><select value={draft.type} onChange={e=>setDraft({...draft,type:e.target.value})}><option>Xe đạp điện</option><option>Xe máy điện</option></select></Field><Field label="Dung lượng pin (%)"><input type="number" min="0" max="100" value={draft.battery} onChange={e=>setDraft({...draft,battery:Math.max(0,Math.min(100,Number(e.target.value)))})}/></Field><Field label="Hub hiện tại"><select value={draft.hub} onChange={e=>setDraft({...draft,hub:e.target.value})}>{seedHubs.map(h=><option key={h.id}>{h.name}</option>)}</select></Field><Field label="Trạng thái"><select value={draft.status} onChange={e=>setDraft({...draft,status:e.target.value})}><option>Sẵn sàng</option><option>Đang sử dụng</option><option>Đang sạc</option><option>Cần kiểm tra</option><option>Bảo trì</option></select></Field></div><div className="op-modal__actions"><button className="btn btn--soft" onClick={()=>setMode(false)}>Hủy</button><button className="btn btn--primary" disabled={!draft.id.trim()} onClick={save}>Lưu phương tiện</button></div></Modal>}
+ </div>;
+}
+export function HubOperationsRouter() { const {pathname}=useLocation(); if(pathname.endsWith('/chargers'))return <ChargerManagementPage/>;if(pathname==='/hubs/manage'||pathname==='/hubs')return <HubManagementPage/>;return <HubDetailPage/>; }

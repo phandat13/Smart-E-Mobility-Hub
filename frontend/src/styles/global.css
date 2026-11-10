@@ -1,0 +1,10 @@
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+button, select, input { font-family: inherit; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-panel); padding: 17px 19px; }
+.tone-danger { color: var(--red-text); }
+.tone-warning { color: var(--amber-text); }
+.tone-success { color: var(--green-text); }
+.tone-info { color: var(--primary); }
+.tone-default { color: var(--text); }
