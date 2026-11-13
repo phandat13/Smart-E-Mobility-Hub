@@ -1,0 +1,194 @@
+.student-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.student-navbar {
+  height: 64px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.student-navbar__brand {
+  flex-shrink: 0;
+}
+
+.student-navbar__logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.student-navbar__nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: flex-start;
+  max-width: 600px;
+}
+
+.student-navbar__link {
+  height: 40px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.student-navbar__link:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.student-navbar__link--active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.student-navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.student-navbar__icon-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: var(--bg);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.student-navbar__icon-btn:hover {
+  background: var(--primary-soft);
+}
+
+.student-navbar__icon {
+  font-size: 16px;
+}
+
+.student-navbar__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  background: var(--red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.student-navbar__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-navbar__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.student-navbar__avatar:hover {
+  opacity: 0.9;
+}
+
+.student-navbar__user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.student-navbar__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.student-navbar__role {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.student-navbar__logout {
+  height: 32px;
+  padding: 0 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.student-navbar__logout:hover {
+  background: var(--red-soft);
+  border-color: var(--red);
+  color: var(--red-text);
+}
+
+.student-layout__main {
+  flex: 1;
+  padding: 24px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .student-navbar__nav {
+    display: none;
+  }
+
+  .student-navbar__user-info {
+    display: none;
+  }
+
+  .student-navbar__logout {
+    padding: 0 8px;
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,157 @@
+.driver-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.driver-topbar {
+  height: 60px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.driver-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.driver-topbar__logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--primary);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+}
+
+.driver-topbar__name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.driver-topbar__tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+  max-width: 600px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 1px;
+}
+
+.driver-topbar__tab {
+  height: 44px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.driver-topbar__tab:hover {
+  color: var(--text);
+}
+
+.driver-topbar__tab--active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.driver-topbar__user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.driver-topbar__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.driver-topbar__user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.driver-topbar__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.driver-topbar__role {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.driver-topbar__logout {
+  height: 32px;
+  padding: 0 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.driver-topbar__logout:hover {
+  background: var(--red-soft);
+  border-color: var(--red);
+  color: var(--red-text);
+}
+
+.driver-layout__main {
+  flex: 1;
+  padding: 24px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .driver-topbar__tabs {
+    gap: 2px;
+  }
+
+  .driver-topbar__tab {
+    padding: 0 12px;
+    font-size: 12px;
+  }
+
+  .driver-topbar__user-info {
+    display: none;
+  }
+}
