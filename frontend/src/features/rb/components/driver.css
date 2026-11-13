@@ -1,0 +1,313 @@
+/* RB02 · App tài xế điều chuyển (layout InternalDriverLayout cung cấp thanh tab phía trên) */
+.rebalance__driver {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  padding: 6px 0 36px;
+}
+
+@media (max-width: 900px) {
+  .rebalance__driver {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rebalance__driver-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  padding: 20px;
+}
+
+.rebalance__driver-list h2 {
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.rebalance__driver-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rebalance__order {
+  text-align: left;
+  font: inherit;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.rebalance__order.is-active {
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  padding: 11px 13px;
+}
+
+.rebalance__order-code {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.rebalance__order-route {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.rebalance__order-meta {
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.rebalance__order .rebalance__pill {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.rebalance__driver-detail {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  padding: 26px 30px;
+  min-width: 0;
+}
+
+.rebalance__driver-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.rebalance__driver-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.rebalance__driver-meta {
+  margin: 6px 0 22px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.rebalance__steps {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+}
+
+.rebalance__step {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  padding-bottom: 20px;
+}
+
+.rebalance__step:last-child {
+  padding-bottom: 0;
+}
+
+.rebalance__step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 40px;
+  bottom: 0;
+  width: 2px;
+  background: var(--track);
+}
+
+.rebalance__step--done:not(:last-child)::after {
+  background: #86efac;
+}
+
+.rebalance__step-dot {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  background: var(--slate-soft);
+  color: var(--muted);
+}
+
+.rebalance__step--done .rebalance__step-dot {
+  background: var(--green-soft);
+  color: var(--green-text);
+}
+
+.rebalance__step--current .rebalance__step-dot {
+  background: var(--primary-soft);
+  color: #2f5bb8;
+}
+
+.rebalance__step-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.rebalance__step-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.rebalance__hand-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.rebalance__hand-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.rebalance__hand-count {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2f5bb8;
+}
+
+.rebalance__hand-track {
+  height: 8px;
+  background: var(--track);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.rebalance__hand-track > span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+
+.rebalance__hand-grid {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 1100px) {
+  .rebalance__hand-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.rebalance__cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface);
+}
+
+.rebalance__cell.is-ok {
+  background: var(--green-soft);
+  border-color: transparent;
+  color: var(--green-text);
+}
+
+.rebalance__cell-slot {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.rebalance__scan {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.rebalance__scan-err {
+  margin: 0 0 10px;
+  color: var(--red-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rebalance__hand-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+  margin: 16px 0 12px;
+}
+
+@media (max-width: 700px) {
+  .rebalance__hand-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rebalance__hand-big {
+  padding: 16px;
+  font-size: 15px;
+}
+
+.rebalance__hand-done:disabled {
+  background: var(--track);
+  color: var(--muted);
+  opacity: 1;
+}
+
+.rebalance__hand-actions .rebalance__btn--ghost:disabled {
+  opacity: 0.7;
+}
+
+.rebalance__empty {
+  text-align: center;
+  padding: 56px 20px;
+  color: var(--muted);
+}
+
+.rebalance__empty h3 {
+  margin: 0 0 6px;
+  color: var(--text);
+  font-size: 18px;
+}
+
+.rebalance__empty p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.rebalance__history {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  padding: 20px 24px;
+}
+
+.rebalance__history h2 {
+  margin: 0 0 14px;
+  font-size: 18px;
+}
