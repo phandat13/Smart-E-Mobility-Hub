@@ -1,0 +1,399 @@
+.hub-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  padding: 17px 19px;
+}
+.hub-text--danger {
+  color: var(--color-danger-text);
+}
+.hub-text--warning {
+  color: var(--color-warning-text);
+}
+.hub-text--success {
+  color: var(--color-success-text);
+}
+.hub-text--info {
+  color: var(--color-primary);
+}
+.hub-text--default {
+  color: var(--color-text-primary);
+}
+
+.hub-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.hub-page-header__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+.hub-page-header__subtitle {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+.network-overview__filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hub-filter {
+  position: relative;
+  display: block;
+}
+.hub-filter select {
+  appearance: none;
+  height: 38px;
+  min-width: 160px;
+  padding: 0 34px 0 13px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.hub-filter::after {
+  content: '▾';
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.network-overview__statistics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.hub-statistic {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 17px 19px;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+}
+.hub-statistic__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+.hub-statistic__value {
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+.hub-statistic__hint {
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: auto;
+}
+
+.vehicle-status {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 15px 19px 18px;
+  margin-bottom: 16px;
+}
+.vehicle-status__header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.vehicle-status__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+.vehicle-status__legend {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+}
+.vehicle-status__legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.vehicle-status__legend-marker {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.vehicle-status__track {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+  margin-top: 22px;
+}
+.vehicle-status__segment {
+  border-radius: 4px;
+  min-width: 4px;
+}
+
+.network-overview__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 16px;
+  align-items: start;
+}
+.hub-panel__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+.hub-panel__subtitle {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+.hub-empty-state {
+  padding: 28px 8px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.hub-overview-table {
+  padding: 17px 11px 11px;
+}
+.hub-overview-table .hub-panel__title,
+.hub-overview-table .hub-panel__subtitle {
+  padding: 0 8px;
+}
+.hub-overview-table__grid {
+  display: grid;
+  grid-template-columns: minmax(140px, 1.3fr) minmax(170px, 1.3fr) 80px 100px minmax(110px, 1fr);
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0 14px;
+}
+.hub-overview-table__grid--header {
+  margin-top: 18px;
+  height: 36px;
+  background: var(--color-background);
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+.hub-overview-table__row {
+  min-height: 54px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-divider);
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+.hub-overview-table__row:last-child {
+  border-bottom: none;
+}
+.hub-overview-table__row:hover {
+  background: var(--color-background);
+}
+.hub-overview-table__name {
+  display: block;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+.hub-overview-table__subtitle {
+  display: block;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-top: 3px;
+}
+.hub-overview-table__cell {
+  font-weight: 500;
+}
+.hub-overview-table__offline {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+.hub-occupancy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hub-occupancy__track {
+  width: 100px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-track);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.hub-occupancy__fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+}
+.hub-occupancy__percentage {
+  font-size: 12px;
+  font-weight: 700;
+}
+.hub-alert-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 11px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.hub-alert-badge--danger {
+  background: var(--color-danger-soft);
+  color: var(--color-danger-text);
+}
+.hub-alert-badge--warning {
+  background: var(--color-warning-soft);
+  color: var(--color-warning-text);
+}
+.hub-alert-badge--muted {
+  background: var(--color-neutral-soft);
+  color: var(--color-text-muted);
+}
+
+.hub-alert-list {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hub-alert {
+  display: flex;
+  gap: 10px;
+  padding: 11px 11px 14px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+}
+.hub-alert__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.hub-alert__title {
+  font-size: 13px;
+  font-weight: 700;
+}
+.hub-alert__detail {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin: 6px 0 10px;
+}
+.hub-action {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.hub-action--primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+.hub-action--soft {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+@media (max-width: 1180px) {
+  .network-overview__statistics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .network-overview__content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.hub-alert__icon--overload,
+.hub-alert__icon--vehicleFault {
+  background: var(--color-danger-soft);
+  color: var(--color-danger-text);
+}
+.hub-alert__icon--imbalance {
+  background: var(--color-warning-soft);
+  color: var(--color-warning-text);
+}
+.hub-alert__icon--disconnected {
+  background: var(--color-neutral-soft);
+  color: var(--color-text-muted);
+}
+.hub-occupancy--danger {
+  --hub-occupancy-color: var(--color-danger-text);
+}
+.hub-occupancy--warning {
+  --hub-occupancy-color: var(--color-warning);
+}
+.hub-occupancy--success {
+  --hub-occupancy-color: var(--color-success);
+}
+.hub-occupancy__fill {
+  width: var(--hub-occupancy-width);
+  background: var(--hub-occupancy-color);
+}
+.hub-occupancy__percentage {
+  color: var(--hub-occupancy-color);
+}
+.vehicle-status__segment {
+  flex-grow: var(--vehicle-status-count);
+}
+.vehicle-status__segment--ready,
+.vehicle-status__legend-marker--ready {
+  background: var(--color-success);
+}
+.vehicle-status__segment--inUse,
+.vehicle-status__legend-marker--inUse {
+  background: var(--color-primary);
+}
+.vehicle-status__segment--charging,
+.vehicle-status__legend-marker--charging {
+  background: var(--color-accent-purple);
+}
+.vehicle-status__segment--pendingCheck,
+.vehicle-status__legend-marker--pendingCheck {
+  background: var(--color-warning);
+}
+.vehicle-status__segment--faulty,
+.vehicle-status__legend-marker--faulty {
+  background: var(--color-danger);
+}
