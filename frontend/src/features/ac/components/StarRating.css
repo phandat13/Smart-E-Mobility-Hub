@@ -1,0 +1,36 @@
+/* Component chọn sao dùng ở AC06 */
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star-rating__star {
+  padding: 0 1px;
+  border: 0;
+  background: none;
+  line-height: 0;
+  color: var(--track);
+  cursor: pointer;
+}
+
+.star-rating__star.is-on {
+  color: var(--amber);
+}
+
+.star-rating__star:disabled {
+  cursor: default;
+}
+
+.star-rating__star:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--primary);
+}
+
+.star-rating__text {
+  margin-left: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+  white-space: nowrap;
+}
