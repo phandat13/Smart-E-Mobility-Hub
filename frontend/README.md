@@ -52,17 +52,23 @@ frontend/src/
 ├── api/
 │   ├── client.ts          # HTTP client (Bearer token, lỗi chuẩn hoá, 401 → logout), USE_MOCK
 │   ├── authApi.ts         # login, register, me, profile, trips, rating (AC)
-│   └── networkApi.ts      # (TV4)
+│   ├── hubApi.ts          # Hub (AC01) — hiện trả dữ liệu mock vì backend chưa có Hub API
+│   └── networkApi.ts      # (nhóm khác)
+├── components/icons/      # Icon SVG dùng chung (StarIcon, RefreshIcon, CloseIcon, PlusIcon)
 ├── auth/                  # AuthContext, RequireAuth (guard theo role), storage an toàn
 ├── layouts/
 │   ├── StudentLayout.tsx  # Navbar: Trang chủ · Đặt chỗ · Chuyến đi · Tài khoản
 │   ├── InternalDriverLayout.tsx  # Tab: Lệnh được giao · Lịch sử lệnh · Báo cáo sự cố
 │   └── AppLayout.tsx      # Sidebar + Topbar vận hành (dùng chung với TV4)
 ├── features/
-│   ├── auth/pages/        # LoginStudent (AC03), LoginInternal, Register (AC02), RegisterSuccess
+│   ├── auth/
+│   │   ├── pages/         # LoginStudent (AC03), LoginInternal, Register (AC02), RegisterSuccess
+│   │   └── constants.ts   # Vai trò/khu vực của cổng nội bộ
 │   ├── ac/
 │   │   ├── pages/         # SearchHubPage (AC01), ProfilePage (AC04), TripHistoryPage (AC05), RateTripPage (AC06)
-│   │   └── tripCode.ts    # Mã chuyến hiển thị "UGddMMyy-xxx"
+│   │   ├── components/    # StarRating (kèm CSS riêng)
+│   │   ├── utils/         # tripCode.ts — mã chuyến hiển thị "UGddMMyy-xxx"
+│   │   └── constants.ts   # Nhãn sao, loại sự cố, cỡ trang
 │   └── rb/
 │       ├── api/transferApi.ts   # RB01/RB02 (mock + thật)
 │       ├── pages/         # DispatchBoardPage (RB01), DriverOrdersPage (RB02: lệnh / lịch sử / sự cố)
@@ -74,7 +80,7 @@ frontend/src/
 └── App.tsx                # Routes + guards
 ```
 
-CSS của mỗi màn dùng tiền tố riêng (`th-`, `hs-`, `rt-`, `pf-`, `reg-`, `rb-`) để không đụng class toàn cục của nhóm khác.
+CSS tách khỏi `.tsx`, mỗi màn một file. Class đặt theo BEM với tên block đầy đủ (`trip-history__chip--green`, `hub-search__pin`, `rate-trip__card`, `profile__field`, `register__pledge`, `rebalance__modal`, `star-rating__star`) để không đụng class của nhóm khác. Style inline chỉ dùng cho giá trị động (toạ độ pin, % pin, ...).
 
 ## Routes
 
