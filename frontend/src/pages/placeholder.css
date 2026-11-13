@@ -1,0 +1,13 @@
+.placeholder {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  padding: 17px 19px;
+}
+.placeholder__title {
+  font-size: 20px;
+  margin: 0;
+}
+.placeholder__description {
+  color: var(--color-text-muted);
+}

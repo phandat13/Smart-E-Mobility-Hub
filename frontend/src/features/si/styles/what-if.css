@@ -1,0 +1,822 @@
+.what-if-simulation {
+  min-width: 0;
+  color: var(--color-text-primary);
+}
+.what-if-simulation__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 0 12px;
+}
+.what-if-simulation__heading h1 {
+  font-size: 23px;
+  line-height: 1.25;
+  margin: 0 0 4px;
+  font-weight: 750;
+  letter-spacing: -0.35px;
+}
+.what-if-simulation__heading p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+.what-if-simulation__card {
+  background: #fff;
+  border: 1px solid #dfe6f0;
+  border-radius: 21px;
+  padding: 22px 24px;
+  min-width: 0;
+}
+.what-if-simulation__card h2 {
+  font-size: 16px;
+  margin: 0 0 4px;
+  color: #121d32;
+}
+.what-if-simulation__card > p {
+  font-size: 12px;
+  color: #7385a1;
+  margin: 0 0 16px;
+}
+.what-if-simulation__create-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.8fr);
+  gap: 16px;
+  align-items: stretch;
+}
+.what-if-simulation__config h2 {
+  margin-bottom: 15px;
+}
+.what-if-simulation__kind-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.what-if-simulation__kind {
+  border: 1px solid #dce5f0;
+  background: #fff;
+  border-radius: 15px;
+  min-height: 81px;
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  cursor: pointer;
+  color: #18243a;
+}
+.what-if-simulation__kind > span {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 13px;
+  background: #f1f5f9;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+.what-if-simulation__kind b,
+.what-if-simulation__kind small {
+  display: block;
+}
+.what-if-simulation__kind b {
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+.what-if-simulation__kind small {
+  font-size: 11px;
+  color: #7385a1;
+  line-height: 1.35;
+}
+.what-if-simulation__kind.what-if-simulation__kind--selected {
+  border: 2px solid #5b8def;
+  background: #edf3ff;
+  padding: 12px;
+}
+.what-if-simulation__kind.what-if-simulation__kind--selected b {
+  color: #5b8def;
+}
+.what-if-simulation__section-gap {
+  margin-top: 25px !important;
+}
+.what-if-simulation__field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 9px;
+  color: #293851;
+}
+.what-if-simulation__hub-chips {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.what-if-simulation__chip {
+  border: 0;
+  border-radius: 22px;
+  padding: 8px 12px;
+  background: #eaf1ff;
+  color: #5684df;
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.what-if-simulation__chip--muted {
+  background: #f0f4f8;
+  color: #657993;
+}
+.what-if-simulation__slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.what-if-simulation__slider-label strong {
+  color: #5b8def;
+  font-size: 15px;
+}
+.what-if-simulation__range {
+  width: 100%;
+  accent-color: #5b8def;
+  margin: 0 0 20px;
+}
+.what-if-simulation__param-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 14px;
+  margin: 0 0 16px;
+}
+.what-if-simulation__param-grid > label,
+.what-if-simulation__save-card > label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #293851;
+}
+.what-if-simulation__param-grid input,
+.what-if-simulation__param-grid select,
+.what-if-simulation__save-card input,
+.what-if-simulation__save-card textarea {
+  width: 100%;
+  border: 1px solid #dce5f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  min-height: 46px;
+  padding: 10px 13px;
+  font: 500 13px var(--font-family-base);
+  color: #1c2940;
+  box-sizing: border-box;
+}
+.what-if-simulation__save-card textarea {
+  resize: vertical;
+  min-height: 75px;
+}
+.what-if-simulation__duration {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+.what-if-simulation__duration button {
+  height: 46px;
+  border: 1px solid #dce5f0;
+  border-radius: 11px;
+  background: white;
+  color: #71829b;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.what-if-simulation__duration button.what-if-simulation__duration-option--selected {
+  background: #5b8def;
+  border-color: #5b8def;
+  color: white;
+}
+.what-if-simulation__valid {
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 12px;
+  padding: 13px 15px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 12px;
+}
+.what-if-simulation__notice {
+  background: #edf3ff;
+  color: #315fae;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  margin-top: 10px;
+}
+.what-if-simulation__config-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 15px;
+}
+.what-if-simulation__button {
+  height: 52px;
+  border-radius: 13px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font: 700 13px var(--font-family-base);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.what-if-simulation__button--primary {
+  background: #5b8def;
+  color: white;
+  border-color: #5b8def;
+}
+.what-if-simulation__button--primary:hover {
+  background: #477cde;
+}
+.what-if-simulation__button--primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.what-if-simulation__button--outline {
+  background: white;
+  color: #293851;
+  border-color: #dce5f0;
+}
+.what-if-simulation__save-card h2 {
+  margin-bottom: 16px;
+}
+.what-if-simulation__save-card > label {
+  margin-bottom: 14px;
+}
+.what-if-simulation__save-card h3 {
+  font-size: 13px;
+  margin: 22px 0 9px;
+}
+.what-if-simulation__summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0;
+  padding-bottom: 2px;
+}
+.what-if-simulation__summary span,
+.what-if-simulation__summary b {
+  padding: 10px 0;
+  border-bottom: 1px solid #e8edf4;
+  font-size: 12px;
+}
+.what-if-simulation__summary span {
+  color: #71829b;
+}
+.what-if-simulation__summary b {
+  text-align: right;
+}
+.what-if-simulation__saved-item {
+  width: 100%;
+  position: relative;
+  text-align: left;
+  border: 1px solid #e0e7f0;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 11px 32px 11px 13px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.what-if-simulation__saved-item b,
+.what-if-simulation__saved-item small {
+  display: block;
+}
+.what-if-simulation__saved-item b {
+  font-size: 12px;
+  color: #17233a;
+}
+.what-if-simulation__saved-item small {
+  font-size: 10px;
+  color: #71829b;
+  margin-top: 4px;
+}
+.what-if-simulation__saved-item strong {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #71829b;
+  font-size: 20px;
+}
+.what-if-simulation__tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: 20px;
+  padding: 6px 10px;
+  background: #eaf1ff;
+  color: #5684df;
+  font-size: 11px;
+  font-weight: 700;
+}
+.what-if-simulation__tag--purple {
+  background: #f1eaff;
+  color: #8055d8;
+}
+.what-if-simulation__tag--green {
+  background: #dcfce7;
+  color: #166534;
+}
+.what-if-simulation__tag--red {
+  background: #fee2e2;
+  color: #b42318;
+}
+.what-if-simulation__tag--yellow {
+  background: #fff2c7;
+  color: #9a4a00;
+}
+.what-if-simulation__tag--muted {
+  background: #f0f4f8;
+  color: #71829b;
+}
+.what-if-simulation__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.what-if-simulation__stat {
+  background: #fff;
+  border: 1px solid #dfe6f0;
+  border-radius: 19px;
+  padding: 17px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-height: 116px;
+}
+.what-if-simulation__stat span {
+  font-size: 12px;
+  color: #667995;
+}
+.what-if-simulation__stat b {
+  font-size: 29px;
+  line-height: 1.05;
+  color: #121d32;
+}
+.what-if-simulation__stat small {
+  font-size: 11px;
+  color: #71829b;
+  font-weight: 650;
+}
+.what-if-simulation__stat b.what-if-simulation__stat-tone--red,
+.what-if-simulation__stat small.what-if-simulation__stat-tone--red {
+  color: #b42318;
+}
+.what-if-simulation__stat b.what-if-simulation__stat-tone--orange,
+.what-if-simulation__stat small.what-if-simulation__stat-tone--orange {
+  color: #a4460b;
+}
+.what-if-simulation__results-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+.what-if-simulation__analysis {
+  padding-bottom: 18px;
+}
+.what-if-simulation__analysis h2 {
+  margin-bottom: 3px;
+}
+.what-if-simulation__analysis > p {
+  margin-bottom: 20px;
+}
+.what-if-simulation__shortages {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+  margin: 24px 0 34px;
+}
+.what-if-simulation__shortage {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.85fr) minmax(90px, 1.2fr) auto;
+  gap: 9px;
+  align-items: center;
+  min-height: 42px;
+}
+.what-if-simulation__shortage > b {
+  font-size: 12px;
+  color: #293851;
+}
+.what-if-simulation__shortage-track {
+  height: 1px;
+  background: #e8edf4;
+  position: relative;
+}
+.what-if-simulation__shortage-track i {
+  height: 28px;
+  position: absolute;
+  top: -13px;
+  left: 0;
+  border-radius: 7px;
+  display: block;
+}
+.what-if-simulation__shortage-fill--red {
+  background: #a51e1e;
+}
+.what-if-simulation__shortage-fill--orange {
+  background: #f59e0b;
+}
+.what-if-simulation__shortage-fill--green {
+  background: #20c568;
+}
+.what-if-simulation__shortage strong {
+  font-size: 11px;
+  min-width: 68px;
+}
+.what-if-simulation__shortage-text--red {
+  color: #a51e1e;
+}
+.what-if-simulation__shortage-text--orange {
+  color: #f59e0b;
+}
+.what-if-simulation__shortage-text--green {
+  color: #20b96a;
+}
+.what-if-simulation__analysis h3 {
+  font-size: 13px;
+  margin: 26px 0 12px;
+}
+.what-if-simulation__bars {
+  height: 178px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 14px;
+  padding: 0 8px;
+}
+.what-if-simulation__bar-wrap {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  flex: 1;
+  max-width: 72px;
+}
+.what-if-simulation__bar-wrap b {
+  font-size: 11px;
+  color: #384963;
+}
+.what-if-simulation__bar-wrap i {
+  width: 100%;
+  max-width: 48px;
+  display: block;
+  border-radius: 7px 7px 5px 5px;
+  background: #5b8def;
+}
+.what-if-simulation__bar-wrap i.what-if-simulation__bar--warning {
+  background: #f59e0b;
+}
+.what-if-simulation__bar-wrap i.what-if-simulation__bar--critical {
+  background: #a51e1e;
+}
+.what-if-simulation__bar-wrap small {
+  font-size: 11px;
+  color: #71829b;
+  font-weight: 650;
+}
+.what-if-simulation__results-side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.what-if-simulation__recommendations h2,
+.what-if-simulation__history h2 {
+  margin-bottom: 3px;
+}
+.what-if-simulation__recommendations > p,
+.what-if-simulation__history > p {
+  margin-bottom: 14px;
+}
+.what-if-simulation__recommendation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #dfe6f0;
+  background: #f8fafc;
+  border-radius: 13px;
+  padding: 12px;
+  margin-bottom: 10px;
+  min-height: 68px;
+}
+.what-if-simulation__recommendation > span {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 50%;
+  background: #eaf1ff;
+  color: #5b8def;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+.what-if-simulation__recommendation b,
+.what-if-simulation__recommendation small {
+  display: block;
+}
+.what-if-simulation__recommendation b {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.what-if-simulation__recommendation small {
+  font-size: 10px;
+  color: #71829b;
+}
+.what-if-simulation__wide {
+  width: 100%;
+  margin-top: 12px;
+}
+.what-if-simulation__history {
+  flex: 1;
+}
+.what-if-simulation__history button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 112px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  border: 0;
+  border-top: 1px solid #e8edf4;
+  background: white;
+  padding: 14px 0;
+  cursor: pointer;
+}
+.what-if-simulation__history button > b {
+  font-size: 11px;
+  color: #71829b;
+}
+.what-if-simulation__history button > strong {
+  font-size: 12px;
+  color: #17233a;
+}
+.what-if-simulation__history button.what-if-simulation__history-item--selected > strong {
+  color: #17233a;
+}
+.what-if-simulation__compare {
+  padding: 18px 12px 10px;
+  margin-bottom: 12px;
+}
+.what-if-simulation__compare h2 {
+  padding: 0 12px 12px;
+}
+.what-if-simulation__compare table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.what-if-simulation__compare th {
+  background: #f7f9fc;
+  color: #71829b;
+  font-size: 10px;
+  padding: 12px 14px;
+}
+.what-if-simulation__compare th:first-child {
+  border-radius: 10px 0 0 10px;
+}
+.what-if-simulation__compare th:last-child {
+  border-radius: 0 10px 10px 0;
+}
+.what-if-simulation__compare td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e8edf4;
+  font-size: 12px;
+}
+.what-if-simulation__compare tbody tr:last-child td {
+  border-bottom: 0;
+}
+.what-if-simulation__compare-valid {
+  margin: 0 0 16px;
+}
+.what-if-simulation__apply-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.8fr);
+  gap: 16px;
+}
+.what-if-simulation__feasibility h2,
+.what-if-simulation__apply-log h2 {
+  margin-bottom: 3px;
+}
+.what-if-simulation__feasibility > p,
+.what-if-simulation__apply-log > p {
+  margin-bottom: 17px;
+}
+.what-if-simulation__rec-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #dfe6f0;
+  border-radius: 15px;
+  padding: 13px 15px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  min-height: 94px;
+}
+.what-if-simulation__rec-choice.what-if-simulation__rec-choice--checked {
+  border-color: #5b8def;
+}
+.what-if-simulation__rec-choice.what-if-simulation__rec-choice--disabled {
+  background: #f8fafc;
+  color: #71829b;
+  cursor: not-allowed;
+}
+.what-if-simulation__rec-choice > input {
+  width: 19px;
+  height: 19px;
+  accent-color: #5b8def;
+  flex: 0 0 19px;
+  margin: 3px 0 0;
+}
+.what-if-simulation__rec-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+.what-if-simulation__rec-copy b {
+  font-size: 13px;
+}
+.what-if-simulation__rec-copy small {
+  font-size: 11px;
+  color: #42536e;
+}
+.what-if-simulation__rec-copy em {
+  font-style: normal;
+  font-size: 11px;
+  color: #5b8def;
+  font-weight: 700;
+}
+.what-if-simulation__rec-choice.what-if-simulation__rec-choice--disabled
+  .what-if-simulation__rec-copy
+  em {
+  color: #71829b;
+}
+.what-if-simulation__rec-choice > .what-if-simulation__tag {
+  margin-left: auto;
+}
+.what-if-simulation__apply-log {
+  display: flex;
+  flex-direction: column;
+}
+.what-if-simulation__log-entry {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 12px 0 20px;
+}
+.what-if-simulation__log-entry > i {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #16803d;
+  font-style: normal;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+.what-if-simulation__log-entry.what-if-simulation__log-entry--muted > i {
+  background: #f0f4f8;
+  color: #71829b;
+}
+.what-if-simulation__log-entry b,
+.what-if-simulation__log-entry small {
+  display: block;
+}
+.what-if-simulation__log-entry b {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.what-if-simulation__log-entry small {
+  font-size: 10px;
+  color: #71829b;
+}
+.what-if-simulation__log-note {
+  margin-top: auto;
+  background: #f0f4f8;
+  color: #71829b;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.what-if-simulation__back-results {
+  margin-top: 15px;
+  width: 100%;
+}
+.what-if-simulation__applied {
+  margin-top: 14px;
+}
+@media (max-width: 1100px) {
+  .what-if-simulation__create-grid,
+  .what-if-simulation__apply-grid {
+    grid-template-columns: 1fr;
+  }
+  .what-if-simulation__results-grid {
+    grid-template-columns: 1fr;
+  }
+  .what-if-simulation__save-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 18px;
+  }
+  .what-if-simulation__save-card h2,
+  .what-if-simulation__save-card h3 {
+    grid-column: 1/-1;
+  }
+  .what-if-simulation__save-card .what-if-simulation__summary {
+    grid-column: 1/-1;
+  }
+}
+@media (max-width: 760px) {
+  .what-if-simulation__heading {
+    flex-direction: column;
+  }
+  .what-if-simulation__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .what-if-simulation__kind-grid {
+    grid-template-columns: 1fr;
+  }
+  .what-if-simulation__param-grid {
+    grid-template-columns: 1fr;
+  }
+  .what-if-simulation__config-actions {
+    grid-template-columns: 1fr;
+  }
+  .what-if-simulation__save-card {
+    display: block;
+  }
+  .what-if-simulation__history button {
+    grid-template-columns: 1fr auto;
+  }
+  .what-if-simulation__history button > strong {
+    grid-row: 2;
+  }
+  .what-if-simulation__rec-choice {
+    flex-wrap: wrap;
+  }
+  .what-if-simulation__rec-choice > .what-if-simulation__tag {
+    margin-left: 30px;
+  }
+  .what-if-simulation__compare {
+    overflow: auto;
+  }
+  .what-if-simulation__compare table {
+    min-width: 600px;
+  }
+}
+@media (max-width: 480px) {
+  .what-if-simulation__card {
+    padding: 17px;
+  }
+  .what-if-simulation__stats {
+    gap: 8px;
+  }
+  .what-if-simulation__stat {
+    padding: 14px;
+  }
+  .what-if-simulation__stat b {
+    font-size: 23px;
+  }
+  .what-if-simulation__shortage {
+    grid-template-columns: 90px 1fr auto;
+    gap: 6px;
+  }
+  .what-if-simulation__shortage strong {
+    font-size: 10px;
+    min-width: 55px;
+  }
+  .what-if-simulation__bars {
+    gap: 7px;
+    padding: 0;
+  }
+  .what-if-simulation__history button {
+    gap: 5px;
+  }
+  .what-if-simulation__history button .what-if-simulation__tag {
+    font-size: 9px;
+    padding: 5px;
+  }
+}
+
+.what-if-simulation__shortage-track i {
+  width: var(--simulation-shortage-width);
+}
+.what-if-simulation__bar-wrap i {
+  height: var(--simulation-occupancy-height);
+}
