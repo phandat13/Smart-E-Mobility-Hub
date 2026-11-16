@@ -1,0 +1,8 @@
+.setup-page { max-width: 1080px; margin: 0 auto; padding: 48px 24px; }
+.setup-page__eyebrow { color: var(--primary); font-weight: 700; }
+.setup-page > p, .setup-page__modules p { color: var(--muted); line-height: 1.6; }
+.setup-page__modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; margin: 32px 0; }
+.setup-page__modules h2 { font-size: 18px; }
+.setup-page a { color: var(--primary); }
+.setup-toggle { display: flex; gap: 10px; align-items: center; font-size: 13px; }
+.setup-sensor { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; font-size: 13px; }

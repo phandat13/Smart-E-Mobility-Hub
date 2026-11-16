@@ -1,0 +1,25 @@
+.portal { min-height: 100vh; padding-bottom: 46px; }
+.portal-header { height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 24px 0 32px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.portal-brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; min-width: 205px; }
+.portal-brand__logo { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--primary); color: var(--surface); }
+.portal-brand strong { display: block; font-size: 18px; }
+.portal-brand small { display: block; font-size: 9px; color: var(--primary); font-weight: 700; margin-top: 2px; }
+.portal-nav { display: flex; gap: 24px; align-items: center; }
+.portal-nav a { font-size: 13px; font-weight: 500; padding: 10px 13px; color: var(--muted); border-radius: 10px; text-decoration: none; white-space: nowrap; }
+.portal-nav a.is-active { background: var(--primary-soft); color: var(--primary); font-weight: 700; }
+.portal-user { display: flex; align-items: center; gap: 8px; font-size: 12px; background: var(--primary-soft); border-radius: 24px; padding: 4px 10px 4px 4px; }
+.portal-user__avatar { display: grid; place-items: center; width: 32px; height: 32px; background: var(--primary); color: var(--surface); border-radius: 50%; font-size: 11px; }
+.portal-header__end { display: flex; align-items: center; gap: 12px; }
+.portal-notification-wrap { position: relative; }
+.portal-bell { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 50%; background: var(--surface); cursor: pointer; }
+.portal-notifications { position: absolute; right: 0; top: 45px; z-index: 5; width: min(280px, 80vw); padding: 20px; border: 1px solid var(--border); background: var(--surface); border-radius: 16px; box-shadow: 0 12px 30px var(--border); font-size: 13px; }
+.portal-notifications a { color: var(--primary); }
+.portal-demo { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px 24px; margin: 20px auto 0; padding: 8px 20px; color: var(--muted); font-size: 11px; }
+.portal-demo a { color: var(--muted); }
+.portal--tech .portal-header { background: var(--sidebar); }
+.portal--tech .portal-brand, .portal--tech .portal-user { color: var(--surface); }
+.portal--tech .portal-brand small { color: var(--sidebar-hint); }
+.portal--tech .portal-nav a { color: var(--sidebar-text); }
+.portal--tech .portal-nav a.is-active, .portal--tech .portal-user { background: var(--tech-active); color: var(--surface); }
+@media (max-width: 1000px) { .portal-header { height: auto; min-height: 68px; flex-wrap: wrap; padding: 14px 20px; gap: 14px; } .portal-nav { order: 3; width: 100%; justify-content: center; gap: 8px; overflow: auto; } .portal-brand { min-width: 0; } }
+@media (max-width: 460px) { .portal-brand small { max-width: 180px; font-size: 8px; } .portal-user strong { display: none; } .portal-nav { justify-content: space-between; gap: 0; } .portal-nav a { padding: 10px 7px; font-size: 12px; } }

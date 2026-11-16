@@ -1,0 +1,39 @@
+/* Design tokens lấy từ file Figma (MO01). Thêm token mới ở đây, không viết màu cứng trong component. */
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --divider: #eef2f7;
+  --track: #e2e8f0;
+  --text: #0f172a;
+  --text-2: #29364b;
+  --muted: #64748b;
+
+  --primary: #5b8def;
+  --primary-soft: #ebf2fd;
+
+  --sidebar: #172540;
+  --sidebar-2: #1f3150;
+  --sidebar-text: #a0afc8;
+  --sidebar-muted: #5d6e8c;
+  --sidebar-hint: #dbeafe;
+
+  --green: #22c55e;
+  --green-text: #166534;
+  --amber: #f59e0b;
+  --amber-text: #92400e;
+  --amber-soft: #fef3c7;
+  --red: #ef4444;
+  --red-text: #991b1b;
+  --red-soft: #fee2e2;
+  --purple: #8b5cf6;
+  --slate-soft: #f1f5f9;
+  --green-soft: #dcfce7;
+  --selected-soft: #f3f7fe;
+  --tech-active: #2a3d63;
+  --overlay: rgba(15, 23, 42, .5);
+
+  --radius-card: 18px;
+  --radius-panel: 20px;
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}

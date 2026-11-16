@@ -1,0 +1,35 @@
+
+# Dependencies
+frontend/node_modules/
+
+# Build output
+frontend/dist/
+frontend/.vite/
+frontend/artifacts/
+frontend/test-results/
+frontend/playwright-report/
+frontend/tests/
+frontend/playwright.config.ts
+
+# Environment variables
+.env
+.env.*
+!.env.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+# Java build output
+backend/target/
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
