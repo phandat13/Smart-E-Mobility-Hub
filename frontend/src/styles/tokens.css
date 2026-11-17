@@ -28,6 +28,10 @@
   --color-danger-soft: #fee2e2;
   --color-accent-purple: #8b5cf6;
   --color-neutral-soft: #f1f5f9;
+  --color-success-soft: #dcfce7;
+  --color-selected-soft: #f3f7fe;
+  --color-tech-active: #2a3d63;
+  --color-overlay: rgba(15, 23, 42, 0.5);
 
   --radius-card: 18px;
   --radius-panel: 20px;

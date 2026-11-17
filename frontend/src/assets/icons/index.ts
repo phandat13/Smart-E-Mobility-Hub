@@ -22,4 +22,18 @@ export const icons = {
   searchSmall: '⌕',
   alert: '▲',
   disconnected: '⦸',
+  // PV / MT
+  parking: '🅿️',
+  scooter: '🛵',
+  bicycle: '🚲',
+  timer: '⏱',
+  dot: '●',
+  edit: '✎',
+  delete: '♜',
+  bell: '🔔',
+  tool: '🛠',
+  wrench: '🔧',
+  parts: '📦',
+  stop: '⛔',
+  empty: '◇',
 } as const;
