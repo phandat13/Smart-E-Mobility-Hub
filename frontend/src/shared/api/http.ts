@@ -1,8 +1,3 @@
-/**
- * Lớp gọi API dùng chung. Bám format lỗi của backend (core/exception/ApiError.java):
- * { code, message, details, path, timestamp }. Màn hình chỉ switch theo `code`.
- */
-
 export const API_BASE = '/api/v1'
 
 const TOKEN_KEY = 'unigo.token'
@@ -28,8 +23,6 @@ export class ApiError extends Error {
   }
 }
 
-// Lệch giờ giữa server và máy người dùng, tính từ header `Date` của mỗi response.
-// Đếm ngược phải dựa trên expiresAt − serverNow, không dựa vào đồng hồ máy (A.2).
 let serverOffsetMs = 0
 
 export function serverNow(): number {
@@ -42,7 +35,6 @@ function syncServerClock(res: Response) {
   if (!Number.isNaN(serverMs)) serverOffsetMs = serverMs - Date.now()
 }
 
-// Chưa có API đăng nhập (module AC). Token được đặt tạm vào localStorage khi chạy với backend thật.
 function readToken(): string | null {
   try {
     return localStorage.getItem(TOKEN_KEY)
@@ -51,10 +43,10 @@ function readToken(): string | null {
   }
 }
 
-/** Trả `null` khi server trả 204 No Content. */
 export async function request<T>(method: string, path: string, body?: unknown): Promise<T | null> {
   const headers: Record<string, string> = { Accept: 'application/json' }
-  if (body !== undefined) headers['Content-Type'] = 'application/json'
+  const isForm = body instanceof FormData
+  if (body !== undefined && !isForm) headers['Content-Type'] = 'application/json'
   const token = readToken()
   if (token) headers.Authorization = `Bearer ${token}`
 
@@ -63,7 +55,7 @@ export async function request<T>(method: string, path: string, body?: unknown): 
     res = await fetch(API_BASE + path, {
       method,
       headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
     })
   } catch {
     throw new ApiError(0, { code: 'NETWORK_ERROR', message: 'Không kết nối được máy chủ' })
@@ -83,4 +75,5 @@ export async function request<T>(method: string, path: string, body?: unknown): 
 export const http = {
   get: <T>(path: string) => request<T>('GET', path),
   post: <T>(path: string, body?: unknown) => request<T>('POST', path, body),
+  postForm: <T>(path: string, form: FormData) => request<T>('POST', path, form),
 }

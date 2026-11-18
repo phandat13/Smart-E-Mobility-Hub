@@ -1,4 +1,3 @@
-/* Token màu/spacing tạm cho UniGo. Cần đối chiếu lại với Figma (B.9) khi có spec chính thức. */
 :root {
   --c-primary: #12805c;
   --c-primary-strong: #0b6447;
@@ -131,4 +130,38 @@ a {
 .alert-warning {
   background: var(--c-warning-soft);
   color: var(--c-warning);
+}
+
+.alert-success {
+  background: var(--c-primary-soft);
+  color: var(--c-primary-strong);
+}
+
+.btn-danger {
+  background: var(--c-danger);
+  color: #fff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #b83434;
+}
+
+.text-success {
+  color: var(--c-primary);
+}
+
+.text-danger {
+  color: var(--c-danger);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }

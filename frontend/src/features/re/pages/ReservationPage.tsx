@@ -1,46 +1,70 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
-import { Link } from 'react-router'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router'
 import { useServerNow } from '../../../shared/hooks/useServerNow'
-import { formatDateTime, formatRange } from '../../../shared/i18n/format'
+import { formatDateTime, formatRange, formatTime } from '../../../shared/i18n/format'
 import { reservationStatusLabel, vehicleTypeLabel } from '../../../shared/i18n/vi'
 import { reKeys, useCurrentReservation, useHubs, useVehicle } from '../api'
+import { CancelReservationModal } from '../components/CancelReservationModal'
+import { ExtendReservationModal } from '../components/ExtendReservationModal'
 import { HoldCountdown } from '../components/HoldCountdown'
+import { HubDirections } from '../components/HubDirections'
 import { RESERVATION_RULES } from '../types'
-import type { Hub, Reservation } from '../types'
+import type { Reservation } from '../types'
 import '../re.css'
 
-/** RE01 (Figma 400-220): Đặt trước phương tiện – xác nhận & đếm ngược. */
 export function ReservationPage() {
   const current = useCurrentReservation()
+  const [cancelledCode, setCancelledCode] = useState<string | null>(null)
 
   if (current.isPending) return <p className="muted">Đang tải đơn đặt xe…</p>
   if (current.isError) return <div className="alert alert-error">Không tải được đơn đặt xe.</div>
-  if (!current.data) return <NoReservation />
-  return <ReservationDetail reservation={current.data} />
+  if (!current.data) return <NoReservation cancelledCode={cancelledCode} />
+  return <ReservationDetail reservation={current.data} onCancelled={setCancelledCode} />
 }
 
-function NoReservation() {
+function NoReservation({ cancelledCode }: { cancelledCode: string | null }) {
   return (
     <div className="card re-empty">
+      {cancelledCode && (
+        <div className="alert alert-success" role="status">
+          Đã hủy đơn #{cancelledCode}. Xe sẽ được hệ thống xác minh trước khi mở lại cho người khác.
+        </div>
+      )}
       <h2>Bạn chưa có đơn đặt xe nào đang hiệu lực</h2>
       <p className="muted">Chọn một xe đang sẵn sàng tại Hub để giữ chỗ trong {RESERVATION_RULES.holdMinutes} phút.</p>
-      <Link className="btn btn-primary" to="/reserve">
-        Chọn xe để đặt trước
-      </Link>
+      <div className="re-actions">
+        <Link className="btn btn-primary" to="/reserve">
+          Chọn xe để đặt trước
+        </Link>
+        <Link className="btn btn-secondary" to="/pickup">
+          Thuê trực tiếp tại Hub
+        </Link>
+      </div>
+      <Link to="/trips/history">Xem lịch sử đặt xe</Link>
     </div>
   )
 }
 
-function ReservationDetail({ reservation }: { reservation: Reservation }) {
+type OpenModal = 'extend' | 'cancel' | null
+
+function ReservationDetail({
+  reservation,
+  onCancelled,
+}: {
+  reservation: Reservation
+  onCancelled: (code: string) => void
+}) {
   const qc = useQueryClient()
+  const navigate = useNavigate()
   const now = useServerNow()
   const vehicle = useVehicle(reservation.vehicleId)
   const hubs = useHubs()
   const hub = hubs.data?.find((h) => h.id === reservation.hubId)
+  const [modal, setModal] = useState<OpenModal>(null)
+  const [extendedNotice, setExtendedNotice] = useState<string | null>(null)
 
   const isHolding = reservation.status === 'RESERVED'
-  // Job hết hạn ở backend chạy định kỳ nên có độ trễ; FE coi như hết hạn ngay khi qua expiresAt.
   const expired = isHolding && now >= Date.parse(reservation.expiresAt)
 
   useEffect(() => {
@@ -48,6 +72,8 @@ function ReservationDetail({ reservation }: { reservation: Reservation }) {
   }, [expired, qc])
 
   const v = vehicle.data
+  const limitReached = reservation.extensionCount >= RESERVATION_RULES.maxExtensions
+  const activeModal = isHolding && !expired ? modal : null
 
   return (
     <div className="re-layout">
@@ -70,7 +96,13 @@ function ReservationDetail({ reservation }: { reservation: Reservation }) {
 
         {reservation.status === 'PICKED_UP' && (
           <div className="alert alert-warning">
-            Bạn đã nhận xe. Theo dõi chuyến đi ở mục <Link to="/trips">Chuyến đi</Link>.
+            Bạn đã nhận xe. <Link to="/trips/current">Xem chuyến đi đang diễn ra</Link>
+          </div>
+        )}
+
+        {extendedNotice && isHolding && !expired && (
+          <div className="alert alert-success" role="status">
+            {extendedNotice}
           </div>
         )}
 
@@ -90,14 +122,18 @@ function ReservationDetail({ reservation }: { reservation: Reservation }) {
         {isHolding && !expired && (
           <>
             <div className="re-actions">
-              {/* RE05, RE04, RE03 làm ở các bước sau; nút giữ chỗ trước để bố cục khớp Figma. */}
-              <button className="btn btn-primary" disabled title="RE05 – chưa làm">
+              <button className="btn btn-primary" onClick={() => navigate('/pickup')}>
                 Nhận xe – quét mã QR trên xe
               </button>
-              <button className="btn btn-secondary" disabled title="RE04 – chưa làm">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setModal('extend')}
+                disabled={limitReached}
+                title={limitReached ? `Đã gia hạn tối đa ${RESERVATION_RULES.maxExtensions} lần` : undefined}
+              >
                 Gia hạn giữ chỗ (+{RESERVATION_RULES.extendMinutes} phút)
               </button>
-              <button className="btn btn-danger-ghost" disabled title="RE03 – chưa làm">
+              <button className="btn btn-danger-ghost" onClick={() => setModal('cancel')}>
                 Hủy đặt trước
               </button>
             </div>
@@ -122,27 +158,30 @@ function ReservationDetail({ reservation }: { reservation: Reservation }) {
           </ul>
         </section>
       </aside>
-    </div>
-  )
-}
 
-function HubDirections({ hub }: { hub: Hub | undefined }) {
-  return (
-    <section className="card">
-      <h3>Đường đến Hub</h3>
-      <div className="re-map" aria-hidden="true">
-        <span>{hub?.name ?? '…'}</span>
-      </div>
-      {hub && (
-        <a
-          className="re-map-link"
-          href={`https://www.google.com/maps/dir/?api=1&destination=${hub.latitude},${hub.longitude}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Mở chỉ đường
-        </a>
+      {activeModal === 'extend' && (
+        <ExtendReservationModal
+          reservation={reservation}
+          onClose={() => setModal(null)}
+          onExtended={(r) => {
+            setModal(null)
+            setExtendedNotice(
+              `Đã gia hạn. Hạn giữ chỗ mới: ${formatTime(r.expiresAt)} (${r.extensionCount}/${RESERVATION_RULES.maxExtensions} lần).`,
+            )
+          }}
+        />
       )}
-    </section>
+      {activeModal === 'cancel' && (
+        <CancelReservationModal
+          reservation={reservation}
+          vehicleCode={v?.code ?? `#${reservation.vehicleId}`}
+          onClose={() => setModal(null)}
+          onCancelled={(r) => {
+            setModal(null)
+            onCancelled(r.code)
+          }}
+        />
+      )}
+    </div>
   )
 }

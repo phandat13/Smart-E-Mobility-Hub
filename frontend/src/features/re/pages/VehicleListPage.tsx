@@ -3,14 +3,10 @@ import { Link, useNavigate } from 'react-router'
 import { ApiError } from '../../../shared/api/http'
 import { formatRange } from '../../../shared/i18n/format'
 import { errorText, vehicleTypeLabel } from '../../../shared/i18n/vi'
-import { useAvailableVehicles, useCurrentReservation, useHubs, useReserve } from '../api'
+import { useAvailableVehicles, useCurrentReservation, useCurrentTrip, useHubs, useReserve } from '../api'
 import { RESERVATION_RULES } from '../types'
 import '../re.css'
 
-/**
- * Danh sách xe "Sẵn sàng" để chọn đặt trước (bước trước RE01).
- * Màn này không có khung riêng trong Figma RE (B.8), nhãn chữ cần nhóm xác nhận.
- */
 export function VehicleListPage() {
   const navigate = useNavigate()
   const [hubId, setHubId] = useState<number | null>(null)
@@ -18,9 +14,10 @@ export function VehicleListPage() {
   const vehicles = useAvailableVehicles(hubId)
   const current = useCurrentReservation()
   const reserve = useReserve()
+  const trip = useCurrentTrip()
 
   const hubName = (id: number | null) => hubs.data?.find((h) => h.id === id)?.name ?? '—'
-  const hasActive = current.data != null
+  const hasActive = current.data != null || trip.data != null
 
   function onReserve(vehicleId: number) {
     reserve.mutate(vehicleId, { onSuccess: () => navigate('/reserve/current') })
@@ -36,10 +33,16 @@ export function VehicleListPage() {
         <p className="muted">Xe được giữ cho bạn trong {RESERVATION_RULES.holdMinutes} phút sau khi đặt.</p>
       </header>
 
-      {hasActive && (
+      {trip.data ? (
         <div className="alert alert-warning">
-          Bạn đang có một đơn đặt xe còn hiệu lực. <Link to="/reserve/current">Xem đơn hiện tại</Link>
+          Bạn đang có một chuyến đi chưa kết thúc. <Link to="/trips/current">Xem chuyến đi đang diễn ra</Link>
         </div>
+      ) : (
+        hasActive && (
+          <div className="alert alert-warning">
+            Bạn đang có một đơn đặt xe còn hiệu lực. <Link to="/reserve/current">Xem đơn hiện tại</Link>
+          </div>
+        )
       )}
 
       {err && (
@@ -90,7 +93,6 @@ export function VehicleListPage() {
               </p>
               <button
                 className="btn btn-primary"
-                // Chặn bấm đúp: khóa mọi nút khi đang gửi một yêu cầu đặt xe.
                 disabled={reserve.isPending || hasActive || lowBattery}
                 onClick={() => onReserve(v.id)}
               >
