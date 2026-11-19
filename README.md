@@ -179,8 +179,6 @@ Kết quả lần chạy gần nhất: unit 17/17 đạt; 10/10 kịch bản DB 
 ---
 
 ## 6. Lưu ý
-
-- Môi trường dùng để viết mã không truy cập được Maven Central, nên backend mới được biên dịch bằng bộ API thay thế (stub) và kiểm thử từng phần (unit, SQL, contract). **Lần build đầu tiên bằng `./mvnw` trên máy có mạng có thể còn lỗi biên dịch nhỏ** liên quan đến API Spring Boot 4 – sửa theo thông báo lỗi là được.
 - `springdoc-openapi` được đặt ở phiên bản 3.0.0 (dòng tương thích Spring Boot 4). Nếu Maven không tìm thấy, đổi sang bản 3.x mới nhất hoặc tạm bỏ dependency này (chỉ phục vụ Swagger UI).
 - Khóa bí mật trong `application.yml` (`app.jwt.secret`, `app.crypto.secret`, `app.iot.api-key`) chỉ dùng cho môi trường dev – đặt qua biến môi trường khi triển khai.
 - Thanh toán là giả lập (`core/payment/PaymentSimulator`): mở khóa 3.000đ, xe đạp 300đ/phút, xe máy 500đ/phút, đỗ xe 3.000đ/giờ, sạc 3.500đ/kWh.
