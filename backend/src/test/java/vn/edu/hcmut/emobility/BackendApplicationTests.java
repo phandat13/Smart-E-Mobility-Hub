@@ -1,12 +1,10 @@
 package vn.edu.hcmut.emobility;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import vn.edu.hcmut.emobility.it.IntegrationTestBase;
 
-@Import(TestcontainersConfiguration.class)
-@SpringBootTest
-class BackendApplicationTests {
+/** Khởi động toàn bộ context + Flyway + kiểm tra ánh xạ entity (ddl-auto=validate). */
+class BackendApplicationTests extends IntegrationTestBase {
 
 	@Test
 	void contextLoads() {

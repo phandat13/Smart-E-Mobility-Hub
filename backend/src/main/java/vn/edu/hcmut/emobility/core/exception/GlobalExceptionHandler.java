@@ -49,13 +49,39 @@ public class GlobalExceptionHandler {
         return build(ErrorCode.VALIDATION_FAILED, "Định dạng yêu cầu không hợp lệ", Map.of(), req);
     }
 
+    /**
+     * Ràng buộc DB là "chốt chặn cuối" chống giữ trùng tài nguyên (NFR nhất quán đồng thời):
+     * ánh xạ tên constraint sang mã lỗi nghiệp vụ để người dùng nhận thông báo đúng.
+     */
+    private static final Map<String, ErrorCode> CONSTRAINTS = Map.ofEntries(
+            Map.entry("ux_reservation_active_student", ErrorCode.ACTIVE_RESERVATION_EXISTS),
+            Map.entry("ux_trip_active_student", ErrorCode.ACTIVE_RESERVATION_EXISTS),
+            Map.entry("ux_reservation_active_vehicle", ErrorCode.VEHICLE_UNAVAILABLE),
+            Map.entry("ux_trip_active_vehicle", ErrorCode.VEHICLE_UNAVAILABLE),
+            Map.entry("ex_slot_no_overlap", ErrorCode.SLOT_UNAVAILABLE),
+            Map.entry("ex_port_no_overlap", ErrorCode.SLOT_UNAVAILABLE),
+            Map.entry("ux_transfer_item_active_vehicle", ErrorCode.VEHICLE_IN_OTHER_OPERATION),
+            Map.entry("ux_personal_vehicle_plate", ErrorCode.PLATE_NUMBER_TAKEN),
+            Map.entry("ux_incident_open_target", ErrorCode.INCIDENT_ALREADY_OPEN),
+            Map.entry("app_user_username_key", ErrorCode.USERNAME_TAKEN),
+            Map.entry("hub_name_key", ErrorCode.HUB_NAME_TAKEN),
+            Map.entry("hub_code_key", ErrorCode.HUB_NAME_TAKEN),
+            Map.entry("scenario_name_key", ErrorCode.SCENARIO_NAME_TAKEN));
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<ApiError> integrity(DataIntegrityViolationException ex, HttpServletRequest req) {
-        log.debug("Integrity violation: {}", ex.getMostSpecificCause().getMessage());
+        String msg = String.valueOf(ex.getMostSpecificCause().getMessage());
+        log.debug("Integrity violation: {}", msg);
+        for (Map.Entry<String, ErrorCode> e : CONSTRAINTS.entrySet()) {
+            if (msg.contains(e.getKey())) {
+                return build(e.getValue(), e.getValue().getMessage(), Map.of(), req);
+            }
+        }
         return build(ErrorCode.CONFLICT, "Tài nguyên không còn khả dụng", Map.of(), req);
     }
 
-    @ExceptionHandler({OptimisticLockingFailureException.class, OptimisticLockException.class})
+    @ExceptionHandler({OptimisticLockingFailureException.class, OptimisticLockException.class,
+            org.springframework.dao.PessimisticLockingFailureException.class})
     ResponseEntity<ApiError> optimistic(Exception ex, HttpServletRequest req) {
         return build(ErrorCode.CONFLICT, ErrorCode.CONFLICT.getMessage(), Map.of(), req);
     }

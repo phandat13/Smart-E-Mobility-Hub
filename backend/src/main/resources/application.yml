@@ -5,7 +5,7 @@ spring:
     compose:
       enabled: false
   datasource:
-    url: jdbc:postgresql://localhost:5433/emobility?userTimeZone=UTC
+    url: jdbc:postgresql://localhost:5433/emobility
     username: emobility
     password: emobility
   jpa:
@@ -14,6 +14,8 @@ spring:
     open-in-view: false
     properties:
       hibernate.jdbc.time_zone: UTC
+  flyway:
+    enabled: true
   threads:
     virtual:
       enabled: true
@@ -21,10 +23,20 @@ spring:
 server:
   port: 8080
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
 app:
   jwt:
     secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-    ttl-minutes: 120
+    ttl-minutes: 600
+  crypto:
+    # Khóa mã hóa dữ liệu định danh (CCCD, SĐT). PHẢI đổi khi triển khai thật.
+    secret: dev-crypto-secret-change-me-32bytes!!
+  account:
+    # MVP: tự động xác thực hồ sơ sau khi đăng ký (thay cho bước xác thực qua Email/SMS ngoài phạm vi)
+    auto-verify: true
   reservation:
     hold-minutes: 15
     extend-minutes: 10
@@ -38,10 +50,18 @@ app:
   booking:
     no-show-minutes: 15
     check-in-grace-minutes: 15
+    min-extend-before-end-minutes: 15
   charging:
     w-battery: 0.6
     w-demand: 0.4
     recalc-interval-minutes: 10
+    target-battery: 90
+  reconciliation:
+    max-attempts: 5
+    evidence-timeout-minutes: 30
+  simulation:
+    preview-token-ttl-seconds: 180
+    drift-threshold: 0.3
   iot:
     mode: simulated
     telemetry-interval-seconds: 30

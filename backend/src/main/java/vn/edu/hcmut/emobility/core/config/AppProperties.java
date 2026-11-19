@@ -10,15 +10,24 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app")
 public record AppProperties(
         @Valid @NotNull Jwt jwt,
+        @Valid @NotNull Crypto crypto,
+        @Valid @NotNull Account account,
         @Valid @NotNull Reservation reservation,
         @Valid @NotNull VehicleRules vehicle,
         @Valid @NotNull HubRules hub,
         @Valid @NotNull Booking booking,
         @Valid @NotNull Charging charging,
+        @Valid @NotNull Reconciliation reconciliation,
+        @Valid @NotNull Simulation simulation,
         @Valid @NotNull Iot iot,
         @Valid @NotNull Cors cors) {
 
     public record Jwt(@NotBlank String secret, @Positive long ttlMinutes) {}
+
+    /** Khóa mã hóa dữ liệu định danh (NFR bảo mật). */
+    public record Crypto(@NotBlank @Size(min = 16) String secret) {}
+
+    public record Account(boolean autoVerify) {}
 
     /** RE01 giữ chỗ 15 phút; RE04 gia hạn +10 phút, tối đa 2 lần. */
     public record Reservation(@Positive int holdMinutes, @Positive int extendMinutes, @PositiveOrZero int maxExtensions) {}
@@ -31,12 +40,19 @@ public record AppProperties(
                            @Positive int offlineAfterMissedCycles,
                            @DecimalMin("0.0") @DecimalMax("1.0") double imbalanceThreshold) {}
 
-    /** PV01/PV03: giữ chỗ 15 phút, cửa sổ check-in ±15 phút. */
-    public record Booking(@Positive int noShowMinutes, @Positive int checkInGraceMinutes) {}
+    /** PV01/PV03/PV04: no-show 15 phút, cửa sổ check-in 15 phút, gia hạn trước giờ kết thúc ≥ 15 phút. */
+    public record Booking(@Positive int noShowMinutes, @Positive int checkInGraceMinutes,
+                          @PositiveOrZero int minExtendBeforeEndMinutes) {}
 
-    /** SC01: trọng số ưu tiên = wBattery*(100-pin) + wDemand*nhu cầu; chu kỳ 10 phút. */
+    /** SC01: ưu tiên = wBattery*(100-pin) + wDemand*nhu cầu; chu kỳ tính lại 10 phút. */
     public record Charging(@PositiveOrZero double wBattery, @PositiveOrZero double wDemand,
-                           @Positive int recalcIntervalMinutes) {}
+                           @Positive int recalcIntervalMinutes, @Min(50) @Max(100) int targetBattery) {}
+
+    /** Góp ý #5, #6: số lần hỏi lại thiết bị, thời gian chờ bằng chứng vật lý khi trả xe offline. */
+    public record Reconciliation(@Positive int maxAttempts, @Positive int evidenceTimeoutMinutes) {}
+
+    /** Góp ý #14: token xem trước khi áp dụng khuyến nghị, ngưỡng lệch trạng thái thực tế. */
+    public record Simulation(@Positive int previewTokenTtlSeconds, @DecimalMin("0.0") double driftThreshold) {}
 
     public record Iot(@NotBlank String mode, @Positive int telemetryIntervalSeconds,
                       @Positive int commandTimeoutSeconds, @NotBlank String apiKey) {

@@ -43,12 +43,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(PUBLIC).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // Thiết bị IoT xác thực bằng X-Device-Key (IotApiKeyFilter)
                         .requestMatchers("/api/v1/iot/**").permitAll()
+                        // NFR phân quyền: mỗi vai trò chỉ truy cập phạm vi của mình
                         .requestMatchers("/api/v1/ops/**").hasRole(Role.OPERATOR.name())
                         .requestMatchers("/api/v1/driver/**").hasRole(Role.DRIVER.name())
                         .requestMatchers("/api/v1/tech/**").hasRole(Role.TECHNICIAN.name())
-                        .requestMatchers(HttpMethod.GET, "/api/v1/hubs/**")
-                        .hasAnyRole(Role.STUDENT.name(), Role.OPERATOR.name())
+                        .requestMatchers("/api/v1/reservations/**", "/api/v1/trips/**", "/api/v1/bookings/**",
+                                "/api/v1/me/**").hasRole(Role.STUDENT.name())
+                        .requestMatchers(HttpMethod.POST, "/api/v1/incidents")
+                        .hasAnyRole(Role.STUDENT.name(), Role.DRIVER.name())
                         .anyRequest().authenticated())
                 .addFilterBefore(new IotApiKeyFilter(props.iot().apiKey()),
                         UsernamePasswordAuthenticationFilter.class)

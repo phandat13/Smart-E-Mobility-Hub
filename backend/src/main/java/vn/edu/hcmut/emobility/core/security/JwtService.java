@@ -8,7 +8,10 @@ import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.crypto.SecretKey;
 import org.springframework.stereotype.Service;
 import vn.edu.hcmut.emobility.core.config.AppProperties;
@@ -44,6 +47,7 @@ public class JwtService {
                 .subject(String.valueOf(user.id()))
                 .claim("username", user.username())
                 .claim("role", user.role().name())
+                .claim("roles", user.roles().stream().map(Enum::name).sorted().collect(Collectors.joining(",")))
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(exp))
                 .signWith(key)
@@ -60,9 +64,11 @@ public class JwtService {
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-            return new AuthUser(Long.valueOf(c.getSubject()),
-                    c.get("username", String.class),
-                    Role.valueOf(c.get("role", String.class)));
+            Role active = Role.valueOf(c.get("role", String.class));
+            String rolesClaim = c.get("roles", String.class);
+            Set<Role> roles = rolesClaim == null || rolesClaim.isBlank() ? Set.of(active)
+                    : Arrays.stream(rolesClaim.split(",")).map(Role::valueOf).collect(Collectors.toSet());
+            return new AuthUser(Long.valueOf(c.getSubject()), c.get("username", String.class), active, roles);
         } catch (JwtException | IllegalArgumentException | NullPointerException e) {
             throw new BusinessException(ErrorCode.TOKEN_INVALID);
         }
